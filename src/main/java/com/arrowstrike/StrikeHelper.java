@@ -73,7 +73,7 @@ public final class StrikeHelper {
     }
 
     /** Highest open Y above the target (up to desiredHeight above it, never above the world limit). */
-    public static double findLaunchY(ServerWorld world, Vec3d target, double desiredHeight) {
+    public static double findLaunchY(ServerWorld world, PlayerEntity player, Vec3d target, double desiredHeight) {
         double worldTop = world.getBottomY() + world.getHeight() - 1;
         double maxY = Math.min(target.y + desiredHeight, worldTop);
         Vec3d from = new Vec3d(target.x, target.y + 0.6, target.z);
@@ -85,8 +85,23 @@ public final class StrikeHelper {
                 from, to,
                 RaycastContext.ShapeType.COLLIDER,
                 RaycastContext.FluidHandling.NONE,
-                net.minecraft.entity.ShapeContext.absent() == null ? null : null));
+                player));
+        if (up.getType() != HitResult.Type.MISS) {
+            return Math.max(from.y + 1.0, up.getPos().y - 1.0);
+        }
         return maxY;
     }
+
+    /** Spawns one real arrow entity with the given velocity and damage multiplier. */
+    public static void spawnArrow(ServerWorld world, PlayerEntity owner,
+                                  double x, double y, double z,
+                                  Vec3d velocity, double damage) {
+        ArrowEntity arrow = new ArrowEntity(world, x, y, z, new ItemStack(Items.ARROW), null);
+        arrow.setOwner(owner);
+        arrow.setNoGravity(true);
+        arrow.setDamage(damage);
+        arrow.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+        arrow.setVelocity(velocity);
+        world.spawnEntity(arrow);
+    }
 }
-// TODO: implement StrikeHelper
