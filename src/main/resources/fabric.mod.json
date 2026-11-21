@@ -1,1 +1,19 @@
-{}
+{
+  "schemaVersion": 1,
+  "id": "arrowstrike",
+  "version": "${version}",
+  "name": "ArrowStrike",
+  "description": "Arrow Stab and Arrow Field: real-arrow orbital strikes.",
+  "authors": ["You"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.arrowstrike.ArrowStrike"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
